@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--配置属性文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+
+    <!--配置mybatis工厂-->
+    <bean  class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--引入数据源-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--引入mybatis.xml核心配置文件-->
+        <property name="configLocation" value="classpath:SqlMapConfig.xml"/>
+        <!--配置实体类-->
+        <property name="typeAliasesPackage" value="com.loyal.pojo"></property>
+    </bean>
+
+   <!--创建mapper文件的扫描器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--注册所有的mapper文件-->
+        <property name="basePackage" value="com.loyal.mapper"></property>
+    </bean>
+
+</beans>
